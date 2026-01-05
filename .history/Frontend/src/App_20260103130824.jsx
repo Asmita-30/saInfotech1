@@ -1,0 +1,53 @@
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import MainLayout from './layouts/MainLayout';
+import Home from './pages/Home';
+import About from './pages/About';
+import Services from './pages/Services';
+import Careers from './pages/Careers';
+import Contact from './pages/Contact';
+import DatabaseService from './pages/ServicesPages/Database';
+import Manged from './pages/ServicesPages/Manged';
+import OnSide from './pages/ServicesPages/OnSite';
+import WebsiteDevelopment from './pages/ServicesPages/Website';
+import SoftwareDevelopment from './pages/ServicesPages/SoftwareDevelopment';
+import  MobileApplication from './pages/ServicesPages/MobileApplication';
+import Digital from './pages/ServicesPages/Digital';
+import Graphics from './pages/ServicesPages/Graphics';
+import Bulksms from './pages/ServicesPages/Bulksms'
+
+
+
+
+
+function App() {
+  return (
+    <MainLayout>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/careers" element={<Careers />} />
+        <Route path="/contact" element={<Contact />} />
+
+        {/* Service Pages */}
+<Route path="/services/database" element={<DatabaseService />} />   
+<Route path="/services/Manged" element={<Manged/>}/>
+<Route path="/services/OnSide" element={<OnSide/>}/>
+<Route path="/services/Website" element={<WebsiteDevelopment/>}/>
+<Route path="/services/SoftwareDevelopment" element={<SoftwareDevelopment/>}/>
+<Route path="/services/MobileApplication" element={<MobileApplication/>}/>
+<Route path="/services/digital" element={<Digital/>}/>
+<Route path="/services/Graphics" element={<Graphics/>}/>
+
+
+
+
+
+
+   </Routes>
+    </MainLayout>
+  );
+}
+
+export default App;

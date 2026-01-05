@@ -1,0 +1,438 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  Menu,
+  X,
+  ChevronDown,
+  Database,
+  Server,
+  Users,
+  Code,
+  Cpu,
+  Smartphone,
+  TrendingUp,
+  Palette,
+  MessageSquare,
+  Sparkles,
+  Zap,
+  Shield,
+  Cloud,
+} from 'lucide-react';
+import logo from '../assets/LOGO-removebg-preview.png';
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [serviceOpen, setServiceOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const serviceRef = useRef(null);
+  const timeoutRef = useRef(null);
+  const navigate = useNavigate();
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navItems = [
+    { name: 'Home', path: '/', icon: <Sparkles size={16} /> },
+    { name: 'About', path: '/about', icon: <Shield size={16} /> },
+    { name: 'Careers', path: '/careers', icon: <Users size={16} /> },
+    { name: 'Contact', path: '/contact', icon: <Cloud size={16} /> },
+  ];
+
+  const services = [
+    { 
+      name: 'Database Management', 
+      icon: <Database size={20} />, 
+      path: '/services/database',  
+      description: 'SQL, NoSQL, data optimization',
+      gradient: 'from-blue-500 to-cyan-400'
+    },
+    { 
+      name: 'Managed Services', 
+      icon: <Server size={20} />, 
+      path: '/services/Manged',
+      description: '24/7 IT infrastructure support',
+      gradient: 'from-purple-500 to-pink-400'
+    },
+    { 
+      name: 'On-site Resources', 
+      icon: <Users size={20} />, 
+      path: '/services/OnSide',
+      description: 'Dedicated team at your location',
+      gradient: 'from-green-500 to-emerald-400'
+    },
+    { 
+      name: 'Website Development', 
+      icon: <Code size={20} />, 
+      path: '/services/Website',
+      description: 'Custom websites and web apps',
+      gradient: 'from-orange-500 to-yellow-400'
+    },
+    { 
+      name: 'Software Development', 
+      icon: <Cpu size={20} />, 
+      path: '/services/SoftwareDevelopment',
+      description: 'Desktop & enterprise software',
+      gradient: 'from-red-500 to-rose-400'
+    },
+    { 
+      name: 'Mobile Application', 
+      icon: <Smartphone size={20} />, 
+      path: '/services/Mobile',
+      description: 'iOS & Android apps',
+      gradient: 'from-indigo-500 to-blue-400'
+    },
+    { 
+      name: 'Digital Marketing', 
+      icon: <TrendingUp size={20} />, 
+      path: '/services/Digital',
+      description: 'SEO, SMM, PPC campaigns',
+      gradient: 'from-teal-500 to-cyan-400'
+    },
+    { 
+      name: 'Graphics Designing', 
+      icon: <Palette size={20} />, 
+      path: '/services/Graphics',
+      description: 'Logo, banners, UI designs',
+      gradient: 'from-pink-500 to-rose-400'
+    },
+    { 
+      name: 'Bulk SMS Services', 
+      icon: <MessageSquare size={20} />, 
+      path: '/services/Bulksms',
+      description: 'Marketing & transactional SMS',
+      gradient: 'from-violet-500 to-purple-400'
+    },
+  ];
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (serviceRef.current && !serviceRef.current.contains(event.target)) {
+        setServiceOpen(false);
+      }
+    };
+
+    if (serviceOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [serviceOpen]);
+
+  // Handle dropdown hover with delay
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setServiceOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setServiceOpen(false);
+    }, 200);
+  };
+
+  // Handle mobile navigation
+  const handleMobileNavigation = (path) => {
+    setIsOpen(false);
+    setServiceOpen(false);
+    // Navigate immediately
+    navigate(path);
+  };
+
+  return (
+    <nav className={`bg-gray-900 text-white sticky top-0 z-50 transition-all duration-300 ${
+      scrolled 
+        ? 'shadow-2xl border-b border-gray-800 backdrop-blur-lg bg-gray-900/95' 
+        : 'shadow-lg'
+    }`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo with glow effect */}
+          <Link to="/" className="flex items-center space-x-3 group cursor-pointer relative">
+            <div className="relative">
+              <img src={logo} alt="SA Infotech Logo" className="h-16 w-auto relative transform group-hover:scale-105 transition-transform duration-300" />
+            </div>
+            <div className="flex flex-col">
+              {/* <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent group-hover:from-blue-300 group-hover:to-cyan-300 transition-all duration-300">
+                SA Infotech
+              </span> */}
+              {/* <span className="text-xs text-gray-400 font-medium">Transforming Ideas into Reality</span> */}
+            </div>
+          </Link>
+
+          {/* Desktop Menu */}
+          <div className="hidden lg:flex items-center space-x-1">
+            {navItems.slice(0, 2).map((item) => (
+              <Link 
+                key={item.name} 
+                to={item.path} 
+                className="relative group px-4 py-2 rounded-lg hover:bg-gray-800/50 transition-all duration-300 cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-blue-400 opacity-80 group-hover:opacity-100 transition-opacity">
+                    {item.icon}
+                  </span>
+                  <span className="text-gray-300 font-medium group-hover:text-white transition-colors">
+                    {item.name}
+                  </span>
+                </div>
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+              </Link>
+            ))}
+
+            {/* Services Dropdown */}
+            <div 
+              className="relative"
+              ref={serviceRef}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <button className="group px-4 py-2 rounded-lg hover:bg-gray-800/50 transition-all duration-300 flex items-center gap-2">
+                <Zap size={18} className="text-yellow-400" />
+                <span className="text-gray-300 group-hover:text-white">Services</span>
+                <ChevronDown
+                  size={16}
+                  className={`text-blue-400 transition-transform duration-300 ${
+                    serviceOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+
+              {serviceOpen && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[360px] bg-gray-900/95 backdrop-blur-xl border border-gray-700 rounded-xl shadow-2xl z-50 animate-fade-in">
+                  
+                  {/* Header */}
+                  <div className="px-4 py-3 border-b border-gray-800">
+                    <h3 className="text-sm font-semibold text-blue-400">
+                      Our Services
+                    </h3>
+                    <p className="text-xs text-gray-400">
+                      Professional IT Solutions
+                    </p>
+                  </div>
+
+                  {/* SERVICES LIST – SINGLE COLUMN */}
+                  <div className="p-3 max-h-[60vh] overflow-y-auto space-y-2">
+                    {services.map((service) => (
+                      <Link
+                        key={service.name}
+                        to={service.path}
+                        onClick={() => setServiceOpen(false)}
+                        className="group flex items-center gap-3 p-2 rounded-md bg-gray-800/50 hover:bg-gray-800 border border-gray-700 hover:border-blue-500/40 transition-all duration-300"
+                      >
+                        {/* Icon */}
+                        <div className={`p-1.5 rounded-md bg-gradient-to-br ${service.gradient}`}>
+                          {React.cloneElement(service.icon, {
+                            size: 16,
+                            className: 'text-white',
+                          })}
+                        </div>
+
+                        {/* Text */}
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-200 group-hover:text-white">
+                            {service.name}
+                          </p>
+                          <p className="text-[11px] text-gray-400 group-hover:text-gray-300">
+                            {service.description}
+                          </p>
+                        </div>
+
+                        <ChevronDown
+                          size={14}
+                          className="rotate-90 text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                        />
+                      </Link>
+                    ))}
+                  </div>
+
+                  {/* Footer */}
+                  <div className="p-3 border-t border-gray-800">
+                    <Link
+                      to="/services"
+                      onClick={() => setServiceOpen(false)}
+                      className="block text-center text-sm py-2 rounded-md bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white transition-all"
+                    >
+                      View All Services
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {navItems.slice(2).map((item) => (
+              <Link 
+                key={item.name} 
+                to={item.path} 
+                className="relative group px-4 py-2 rounded-lg hover:bg-gray-800/50 transition-all duration-300 cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-blue-400 opacity-80 group-hover:opacity-100 transition-opacity">
+                    {item.icon}
+                  </span>
+                  <span className="text-gray-300 font-medium group-hover:text-white transition-colors">
+                    {item.name}
+                  </span>
+                </div>
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+              </Link>
+            ))}
+
+            {/* CTA Button */}
+            <Link 
+              to="/contact" 
+              className="ml-4 px-6 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-medium transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
+            >
+              Get Quote
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button 
+            className="lg:hidden p-3 rounded-xl bg-gray-800/50 hover:bg-gray-700/50 transition-all duration-300 cursor-pointer group"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <div className="relative">
+              {isOpen ? (
+                <X size={26} className="text-red-400 transform group-hover:rotate-90 transition-transform duration-300" />
+              ) : (
+                <Menu size={26} className="text-blue-400 transform group-hover:rotate-180 transition-transform duration-300" />
+              )}
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Enhanced Mobile Menu - SIMPLIFIED VERSION */}
+      {isOpen && (
+        <div className="lg:hidden fixed inset-0 z-50">
+          {/* Overlay that closes menu when clicked */}
+          <div 
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setIsOpen(false)}
+          />
+          
+          {/* Sidebar */}
+          <div className="fixed right-0 top-0 h-full w-80 bg-gray-900 border-l border-gray-800 shadow-2xl">
+            <div className="p-4 border-b border-gray-800 bg-gray-800/50">
+              <div className="flex items-center justify-between">
+                <Link 
+                  to="/" 
+                  className="flex items-center space-x-3"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <img src={logo} alt="SA Infotech Logo" className="h-12 w-auto" />
+                </Link>
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  className="p-2 hover:bg-gray-700 rounded-lg transition-all duration-300"
+                >
+                  <X size={24} className="text-gray-300" />
+                </button>
+              </div>
+            </div>
+
+            <div className="p-4 space-y-1 overflow-y-auto h-[calc(100vh-80px)]">
+              {/* Main Navigation Items */}
+              {navItems.map((item) => (
+                <div
+                  key={item.name} 
+                  onClick={() => handleMobileNavigation(item.path)}
+                  className="flex items-center gap-3 py-3 px-3 hover:bg-gray-800 rounded-lg transition-all duration-300 cursor-pointer font-medium group"
+                >
+                  <div className="p-2 bg-gray-800 rounded-lg group-hover:bg-blue-900/30 transition-colors">
+                    {item.icon}
+                  </div>
+                  <span className="text-gray-300 group-hover:text-white">{item.name}</span>
+                </div>
+              ))}
+              
+              {/* Services Section */}
+              <div className="mt-2 pt-4 border-t border-gray-800">
+                <div className="mb-2 px-3">
+                  <span className="text-sm font-semibold text-blue-400">Our Services</span>
+                </div>
+                
+                <div className="space-y-1">
+                  {services.map((service) => (
+                    <div
+                      key={service.name}
+                      onClick={() => handleMobileNavigation(service.path)}
+                      className="flex items-center gap-3 py-3 px-3 hover:bg-gray-800 rounded-lg transition-all duration-300 cursor-pointer group"
+                    >
+                      <div className={`p-2 rounded-lg bg-gradient-to-br ${service.gradient}`}>
+                        {React.cloneElement(service.icon, { className: "text-white" })}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-200 group-hover:text-white">
+                          {service.name}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          {service.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mobile CTA Button */}
+              <div className="mt-8 p-2">
+                <div
+                  onClick={() => handleMobileNavigation('/contact')}
+                  className="w-full py-3 px-4 text-center rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-medium transition-all duration-300 cursor-pointer"
+                >
+                  Get Free Consultation
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Styles */}
+      <style jsx>{`
+        @keyframes gradient-x {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        .animate-gradient-x {
+          background-size: 200% 200%;
+          animation: gradient-x 3s ease infinite;
+        }
+        
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-out;
+        }
+        
+        /* Custom Scrollbar */
+        .overflow-y-auto::-webkit-scrollbar {
+          width: 4px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-track {
+          background: rgba(31, 41, 55, 0.3);
+        }
+        .overflow-y-auto::-webkit-scrollbar-thumb {
+          background: #3b82f6;
+          border-radius: 2px;
+        }
+      `}</style>
+    </nav>
+  );
+};
+
+export default Navbar;
